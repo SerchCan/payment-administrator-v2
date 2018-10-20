@@ -10,7 +10,7 @@ var jwt = require('jsonwebtoken');
 var usersRouter = require('./routes/users');
 var login = require('./routes/Auth/login');
 var signup = require('./routes/Auth/signup');
-
+var test = require('./routes/test');
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 var app = express();
@@ -30,9 +30,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/login', login);
 app.use('/signup', signup);
-app.use('/users', usersRouter);
+app.use('/profile', usersRouter);
+app.use('/t0', test);
 
-//Verify login
+/*Verify login
 
 app.use(function (req, res, next) {
     var token = req.cookies["Token"] || req.headers["token"];
@@ -56,6 +57,7 @@ app.use(function (req, res, next) {
 app.use(function (req, res, next) {
     res.redirect('/dashboard');
 });
+*/
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));
