@@ -1,11 +1,11 @@
 var express = require('express');
-var router = express.Router();
 var jwt = require('jsonwebtoken');
+var bcrypt = require('bcrypt')
+var router = express.Router();
 
 var database = require("../../config/db");
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
-var bcrypt = require('bcrypt')
 
 router.post('/', function (req, res, next) {
     var appData = {
@@ -22,13 +22,13 @@ router.post('/', function (req, res, next) {
         } else {
             connection.query("SELECT * FROM USERS WHERE MAIL=?", [mail], (err, rows) => {
                 if (err) {
-                    appData.data = "Error ocurred on query";
+                    appData.data = "Error occurred on query";
                     res.status(400).json(appData);
                 } else {
                     if (rows.length > 0) {
                         bcrypt.compare(password, rows[0].PASSWORD, (err, match) => {
                             if (err) {
-                                appData.data = "Error Ocurred on hashing";
+                                appData.data = "Error Occurred on hashing";
                                 res.status(400).json(appData)
                             }
                             if (match) {
@@ -56,26 +56,4 @@ router.post('/', function (req, res, next) {
         connection.release();
     })
 });
-/*
-router.use(function (req, res, next) {
-    var token = req.body.token || req.headers["token"];
-    var appData = {};
-    if (token) {
-        jwt.verify(token, process.env.SECRET_KEY, function (err) {
-            if (err) {
-                appData["error"] = 1;
-                appData["data"] = "Token is invalid";
-                res.status(500).json(appData);
-            } else {
-                next();
-            }
-        });
-    } else {
-        appData["error"] = 1;
-        appData["data"] = "Please send a token";
-        res.status(403).json(appData);
-    }
-});
-*/
-
 module.exports = router;
