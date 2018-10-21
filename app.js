@@ -7,10 +7,15 @@ var jwt = require('jsonwebtoken');
 
 
 //var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var login = require('./routes/Auth/login');
 var signup = require('./routes/Auth/signup');
+var login = require('./routes/Auth/login');
+var logout = require('./routes/Auth/logout');
+
+var usersRouter = require('./routes/users');
+
+var Dashboard = require('./routes/Dashboard/dash');
 var test = require('./routes/test');
+
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 var app = express();
@@ -29,8 +34,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/login', login);
+app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/profile', usersRouter);
+app.use('/dashboard', Dashboard);
 app.use('/t0', test);
 
 /*Verify login
