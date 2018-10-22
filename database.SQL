@@ -211,7 +211,7 @@ ALTER TABLE `users_types`
 --
 ALTER TABLE `pivot`
   ADD CONSTRAINT `pivot_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`),
-  ADD CONSTRAINT `pivot_ibfk_2` FOREIGN KEY (`ID_PIVOT`) REFERENCES `services` (`ID_SERVICE`);
+  ADD CONSTRAINT `pivot_ibfk_2` FOREIGN KEY (`ID_SERVICE`) REFERENCES `services` (`ID_SERVICE`);
 
 --
 -- Filtros para la tabla `registers`

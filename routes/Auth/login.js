@@ -40,7 +40,7 @@ router.post('/', function (req, res, next) {
                                 token = jwt.sign({
                                     data: rows[0]
                                 }, process.env.SECRET_KEY, {
-                                    expiresIn: 60 * 60 * 10
+                                    expiresIn: 60 * 60
                                 });
                                 appData.error = 0;
                                 appData.token = token;
