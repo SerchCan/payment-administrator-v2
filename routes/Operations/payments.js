@@ -30,7 +30,7 @@ function date_returned(d, count) {
 }
 
 
-router.get('NextDate/:plattform/:IDUser', function (req, res, next) {
+router.get('/NextDate/:plattform/:IDUser', function (req, res, next) {
     var plattform = req.params.plattform;
     var IDUser = req.params.IDUser;
     decoded = jwt.decode(req.cookies["Token"]);

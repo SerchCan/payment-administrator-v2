@@ -40,8 +40,8 @@ app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/profile', usersRouter);
 app.use('/dashboard', Dashboard);
-app.use('/plat', plattform);
-app.use('/pay', Payments);
+app.use('/plattforms', plattform);
+app.use('/payment', Payments);
 //app.use('/t0', test)
 
 // catch 404 and forward to error handler
