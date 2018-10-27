@@ -13,6 +13,7 @@ var logout = require('./routes/Auth/logout');
 var usersRouter = require('./routes/users');
 
 var plattform = require('./routes/operations/Plattforms');
+var Payments = require('./routes/operations/payments');
 
 var Dashboard = require('./routes/Dashboard/dash');
 //var test = require('./routes/test');
@@ -40,6 +41,7 @@ app.use('/signup', signup);
 app.use('/profile', usersRouter);
 app.use('/dashboard', Dashboard);
 app.use('/plat', plattform);
+app.use('/pay', Payments);
 //app.use('/t0', test)
 
 // catch 404 and forward to error handler

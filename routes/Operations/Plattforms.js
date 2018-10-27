@@ -81,8 +81,8 @@ router.get('/Create/', function (req, res, next) {
             appData.data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
-            var query = `INSERT INTO SERVICES (NAME,PRICE,ID_USER)
-                VALUES (?,?,?)`;
+            var query = `INSERT INTO SERVICES (NAME,PRICE,CREATION_DATE,ID_USER)
+                VALUES (?,?,NOW(),?)`;
             connection.query(query, [name, price, decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
