@@ -8,32 +8,35 @@ var database = require("../../config/db");
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 
+//Retrieve login page
 router.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../../pages/login.html'));
 });
+
+//Login service
 router.post('/', function (req, res, next) {
     var appData = {
         "error": 1,
-        "data": ""
+        "Data": ""
     };
     var mail = req.body.mail;
     var password = req.body.password;
 
     database.getConnection((err, connection) => {
         if (err) {
-            appData.data = "Internal Server Error";
+            appData.Data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
             connection.query("SELECT * FROM USERS WHERE MAIL=?", [mail], (err, rows) => {
                 if (err) {
-                    appData.data = "Error occurred on query";
+                    appData.Data = "Error occurred on query";
                     res.status(400).json(appData);
                 } else {
                     if (rows.length > 0) {
                         bcrypt.compare(password, rows[0].PASSWORD, (err, match) => {
                             if (err) {
-                                appData.data = "Error Occurred on hashing";
-                                res.status(400).json(appData)
+                                appData.Data = "Error Occurred on hashing";
+                                res.status(400).json(appData);
                             }
                             if (match) {
                                 //success
@@ -50,15 +53,15 @@ router.post('/', function (req, res, next) {
 
                             } else {
                                 appData.error = 1;
-                                appData.data = "Email and password does not match";
-                                res.status(204).redirect("/login");
+                                appData.Data = "Email and password does not match";
+                                res.status(400).json(appData);
 
                             }
                         });
                     } else {
                         appData.error = 1;
-                        appData.data = "Email does not exists";
-                        res.status(204).redirect("/login");
+                        appData.Data = "Email does not exists";
+                        res.status(400).json(appData);
                     }
                 }
             });

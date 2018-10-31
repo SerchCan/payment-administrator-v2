@@ -7,7 +7,7 @@ var database = require("../../config/db");
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 
-// If not logged
+// Middleware
 router.use(function (req, res, next) {
     var token = req.cookies["Token"] || req.headers["token"];
     if (token) {
@@ -23,13 +23,46 @@ router.use(function (req, res, next) {
     }
 });
 
-
+//Function for listing json
 function date_returned(d, count) {
     d.setMonth((d.getMonth() + count) + 1)
     return d.getMonth() + '/' + d.getFullYear();
 }
+// My next date
+router.get('/NextDate/:plattform/', function (req, res, next) {
+    var plattform = req.params.plattform;
+    decoded = jwt.decode(req.cookies["Token"]);
+    var IDUser = decoded["data"].ID_USER;
+    var appData = {};
+    database.getConnection((err, connection) => {
+        if (err) {
+            appData.data = "Internal Server Error";
+            res.status(500).json(appData);
+        } else {
+            //Supose user is the Admin of the plattform
+            var query = "SELECT COUNT(ID_REGISTER) AS COUNT FROM REGISTERS WHERE ID_SERVICE = ? AND ID_USER = ?";
+            connection.query(query, [plattform, IDUser], (err, rows) => {
+                if (err) {
+                    appData.data = "Error occurred on query";
+                    res.status(400).json(appData);
+                }
+                var query = "SELECT CREATION_DATE FROM SERVICES WHERE ID_SERVICE = ?";
+                connection.query(query, [plattform], (err, rowService) => {
+                    if (err) {
+                        appData.data = "Error occurred on query";
+                        res.status(400).json(appData);
+                    }
+                    res.status(200).json({
+                        date: date_returned(rowService[0].CREATION_DATE, rows[0].COUNT)
+                    });
+                })
+            });
+        }
+        connection.release();
+    })
 
-
+});
+// Next date of user
 router.get('/NextDate/:plattform/:IDUser', function (req, res, next) {
     var plattform = req.params.plattform;
     var IDUser = req.params.IDUser;
@@ -63,6 +96,7 @@ router.get('/NextDate/:plattform/:IDUser', function (req, res, next) {
     })
 
 });
+// Add payment of member
 router.post('/:plattform/:IDUser', function (req, res, next) {
     var plattform = req.params.plattform;
     var IDUser = req.params.IDUser;
@@ -101,5 +135,7 @@ router.post('/:plattform/:IDUser', function (req, res, next) {
         connection.release();
     })
 });
+
+
 
 module.exports = router;

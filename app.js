@@ -10,14 +10,12 @@ var signup = require('./routes/Auth/signup');
 var login = require('./routes/Auth/login');
 var logout = require('./routes/Auth/logout');
 
-var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/Operations/users');
 
-var plattform = require('./routes/operations/Plattforms');
-var Payments = require('./routes/operations/payments');
+var plattform = require('./routes/Operations/Plattforms');
+var Payments = require('./routes/Operations/payments');
 
 var Dashboard = require('./routes/Dashboard/dash');
-//var test = require('./routes/test');
-
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 var app = express();
@@ -34,15 +32,15 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Routes
 app.use('/', indexRouter);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
-app.use('/profile', usersRouter);
+app.use('/users', usersRouter);
 app.use('/dashboard', Dashboard);
 app.use('/plattforms', plattform);
 app.use('/payment', Payments);
-//app.use('/t0', test)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

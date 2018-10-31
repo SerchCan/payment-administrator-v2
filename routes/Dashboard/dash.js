@@ -6,6 +6,7 @@ var router = express.Router();
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 
+//Middleware that checks session
 router.use(function (req, res, next) {
     var token = req.cookies["Token"] || req.headers["token"];
     if (token) {
@@ -20,6 +21,7 @@ router.use(function (req, res, next) {
         res.status(204).redirect("/login");
     }
 });
+//Redirect if logged
 router.use(function (req, res, next) {
     res.status(200).sendFile(path.join(__dirname, '../../pages/dashboard.html'));
 });

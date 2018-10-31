@@ -1,15 +1,72 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/index.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/PlattformsDataHandler.js"></script>
     <title>Document</title>
 </head>
 
 <body>
-    <h1>dashboard</h1>
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#plattforms">Plataformas</a></li>
+            <li><a data-toggle="tab" href="#payments">Pagos</a></li>
+            <li><a href="/logout/">Cerrar sesión</a></li>
+        </ul>
+        <div class="tab-content">
+            <div id="plattforms" class="tab-pane fade">
+                <div class="container">
+                    <h3>Plataformas administradas:</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td>Nombre</td>
+                                <td>Precio</td>
+                                <td>Editar</td>
+                                <td>Borrar</td>
+
+                            </tr>
+                        </thead>
+                        <tbody id="Admin-plats">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="container">
+                    <h3>Plataformas:</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <td>#</td>
+                                <td>Nombre</td>
+                                <td>Precio</td>
+                                <td>Siguiente fecha de pago</td>
+                            </tr>
+                        </thead>
+                        <tbody id="User-plats">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div id="payments" class="tab-pane fade">
+                <h3>Menu 2</h3>
+                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium,
+                    totam rem aperiam.</p>
+            </div>
+
+        </div>
+    </div>
 </body>
+
+
 
 </html>

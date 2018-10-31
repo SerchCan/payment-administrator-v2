@@ -24,6 +24,7 @@ router.use(function (req, res, next) {
 });
 
 /* GET users listing. */
+// Return list of members
 router.get('/', function (req, res, next) {
 
     res.send('respond with a resource');

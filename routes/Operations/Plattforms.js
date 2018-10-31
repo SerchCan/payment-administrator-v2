@@ -8,7 +8,7 @@ var database = require("../../config/db");
 
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
 
-// If not logged
+// Middleware
 router.use(function (req, res, next) {
     var token = req.cookies["Token"] || req.headers["token"];
     if (token) {
@@ -33,7 +33,7 @@ router.get('/Admin_Plattforms', function (req, res, next) {
             appData.data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
-            connection.query("SELECT * FROM SERVICES WHERE ID_USER = ?", [decoded["data"].ID_USER], (err, rows) => {
+            connection.query("SELECT * FROM SERVICES WHERE ID_USER = ? AND STATUS=1", [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
                     res.status(400).json(appData);
@@ -56,7 +56,7 @@ router.get('/User_Plattforms', function (req, res, next) {
         } else {
             query = `SELECT DISTINCT services.ID_SERVICE, services.NAME, services.PRICE, services.ID_USER 
                      FROM services join pivot INNER JOIN users 
-                     WHERE pivot.ID_USER = ?`;
+                     WHERE pivot.ID_USER = ?  AND services.STATUS=1`;
             connection.query(query, [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
@@ -68,7 +68,7 @@ router.get('/User_Plattforms', function (req, res, next) {
         connection.release();
     })
 });
-
+// Create plattform
 router.get('/Create/', function (req, res, next) {
     var appData = {};
     var name = req.body.Name;
@@ -81,8 +81,7 @@ router.get('/Create/', function (req, res, next) {
             appData.data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
-            var query = `INSERT INTO SERVICES (NAME,PRICE,CREATION_DATE,ID_USER)
-                VALUES (?,?,NOW(),?)`;
+            var query = `INSERT INTO SERVICES (NAME,PRICE,CREATION_DATE,STATUS,ID_USER) VALUES (?,?,NOW(),1,?)`;
             connection.query(query, [name, price, decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
@@ -122,22 +121,20 @@ router.get('/Create/', function (req, res, next) {
         connection.release();
     })
 });
-
+// Edit plattform
 router.get('/edit/:plattform', function (req, res, next) {
     var plattform = req.params.plattform;
     var name = req.body.Name;
     var price = req.body.Price;
     var appData = {};
     decoded = jwt.decode(req.cookies["Token"]);
-    if (decoded.ID_TYPE == 2) {
+    if (decoded["data"].ID_TYPE == 2) {
         database.getConnection((err, connection) => {
             if (err) {
                 appData.data = "Internal Server Error";
                 res.status(500).json(appData);
             } else {
-                var query = `UPDATE SERVICES
-                    SET NAME = ?, PRICE = ?
-                    WHERE ID_SERVICE = ? AND ID_USER = ?`;
+                var query = `UPDATE SERVICES SET NAME = ?, PRICE = ? WHERE ID_SERVICE = ? AND ID_USER = ?`;
                 connection.query(query, [name, price, plattform, decoded["data"].ID_USER], (err, rows) => {
                     if (err) {
                         appData.data = "Error occurred on query";
@@ -155,20 +152,22 @@ router.get('/edit/:plattform', function (req, res, next) {
         res.json(appData)
     }
 });
-
+// Delete plattform
 router.get('/delete/:plattform', function (req, res, next) {
     var plattform = req.params.plattform;
     decoded = jwt.decode(req.cookies["Token"]);
-    if (decoded.ID_TYPE == 2) {
+    var appData = {};
+    console.log(decoded);
+    if (decoded["data"].ID_TYPE == 2) {
         database.getConnection((err, connection) => {
             if (err) {
                 appData.data = "Internal Server Error";
                 res.status(500).json(appData);
             } else {
-                var query = `DELETE FROM SERVICES
-                WHERE ID_SERVICE = ? AND ID_USER = ?`;
+                var query = `UPDATE SERVICES SET STATUS=0 WHERE ID_SERVICE = ? AND ID_USER = ?`;
                 connection.query(query, [plattform, decoded["data"].ID_USER], (err, rows) => {
                     if (err) {
+                        console.log(err)
                         appData.data = "Error occurred on query";
                         res.status(400).json(appData);
                     }

@@ -5,22 +5,18 @@ var router = express.Router();
 /* GET home page. */
 
 router.get('/', function (req, res, next) {
-    var token = req.cookies["Token"] || req.headers["token"];
+    var token = req.cookies["Token"] || req.headers["Token"];
     if (token) {
         jwt.verify(req.cookies["Token"], process.env.SECRET_KEY, function (err) {
             if (err) {
-                res.render('index', {
-                    title: 'Express'
-                });
+                res.status(200).redirect("/login");
             } else {
                 //if logged show dashboard
                 res.status(200).redirect("/dashboard");
             }
         });
     } else {
-        res.render('index', {
-            title: 'Express'
-        });
+        res.status(200).redirect("/login");
     }
 
 });
