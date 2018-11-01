@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="javascripts/bootstrap.min.js"></script>
+    <script src="javascripts/LoginHandler.js"></script>
+</head>
+
+<body>
+    <!--Handle response-->
+    <div id="resp" class="alert alert-dismissible fade show" role="alert">
+
+    </div>
+    <!-- LOGIN MODULE -->
+    <div class="login">
+        <div class="wrap">
+            <!-- TOGGLE -->
+            <div id="toggle-wrap">
+                <div id="toggle-terms">
+                    <div id="cross">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- SLIDER -->
+            <div class="content">
+                <!-- SLIDESHOW -->
+                <div id="slideshow">
+                    <div class="one">
+                        <h2><span>Paid Manager</span></h2>
+                        <p>Registrate para poder estar y cobrar al pendiente a tus planes familiares. </p>
+                    </div>
+                </div>
+            </div>
+            <!-- LOGIN FORM -->
+            <div class="user">
+                <!-- ACTIONS
+                <div class="actions">
+                    <a class="help" href="#signup-tab-content">Sign Up</a><a class="faq" href="#login-tab-content">Login</a>
+                </div>
+                -->
+                <div class="form-wrap">
+                    <!-- TABS -->
+                    <div class="tabs">
+                        <h3 class="login-tab"><a class="log-in active" href="#login-tab-content"><span>Login<span></a></h3>
+                        <h3 class="signup-tab"><a class="sign-up" href="#signup-tab-content"><span>Sign Up</span></a></h3>
+                    </div>
+                    <!-- TABS CONTENT -->
+                    <div class="tabs-content">
+                        <!-- TABS CONTENT LOGIN -->
+                        <div id="login-tab-content" class="active">
+                            <form class="login-form" id="login-form" method="POST" action="/login/">
+                                <input name="mail" type="text" class="input" id="user_login" autocomplete="off"
+                                    placeholder="Email">
+                                <input name="password" type="password" class="input" id="user_pass" autocomplete="off"
+                                    placeholder="Password">
+                                <input type="submit" class="button" value="Login">
+                            </form>
+                        </div>
+                        <!-- TABS CONTENT SIGNUP -->
+                        <div id="signup-tab-content">
+                            <form class="signup-form" action="/signup/" method="post" id="signup-form">
+                                <input name="fname" type="text" class="input" id="name" autocomplete="off" placeholder="Nombre(s)">
+                                <input name="lname" type="text" class="input" id="lastname" autocomplete="off"
+                                    placeholder="Apellidos">
+                                <input name="mail" type="email" class="input" id="user_email" autocomplete="off"
+                                    placeholder="Email">
+                                <input name="password" type="password" class="input" id="user_pass" autocomplete="off"
+                                    placeholder="Password">
+                                <input type="submit" class="button" value="Sign Up">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            var tab = $('.tabs h3 a');
+            tab.on('click', function (event) {
+                event.preventDefault();
+                tab.removeClass('active');
+                $(this).addClass('active');
+                tab_content = $(this).attr('href');
+                $('div[id$="tab-content"]').removeClass('active');
+                $(tab_content).addClass('active');
+            });
+        });
+
+        // CUSTOM JQUERY FUNCTION FOR SWAPPING CLASSES
+        (function ($) {
+            'use strict';
+            $.fn.swapClass = function (remove, add) {
+                this.removeClass(remove).addClass(add);
+                return this;
+            };
+        }(jQuery));
+
+        // SHOW/HIDE PANEL ROUTINE (needs better methods)
+        // I'll optimize when time permits.
+        $(function () {
+            $('.agree,.forgot, #toggle-terms, .log-in, .sign-up').on('click', function (event) {
+                event.preventDefault();
+                var terms = $('.terms'),
+                    recovery = $('.recovery'),
+                    close = $('#toggle-terms'),
+                    arrow = $('.tabs-content .fa');
+                if ($(this).hasClass('agree') || $(this).hasClass('log-in') || ($(this).is(
+                        '#toggle-terms')) && terms.hasClass('open')) {
+                    if (terms.hasClass('open')) {
+                        terms.swapClass('open', 'closed');
+                        close.swapClass('open', 'closed');
+                        arrow.swapClass('active', 'inactive');
+                    } else {
+                        if ($(this).hasClass('log-in')) {
+                            return;
+                        }
+                        terms.swapClass('closed', 'open').scrollTop(0);
+                        close.swapClass('closed', 'open');
+                        arrow.swapClass('inactive', 'active');
+                    }
+                } else if ($(this).hasClass('forgot') || $(this).hasClass('sign-up') || $(this).is(
+                        '#toggle-terms')) {
+                    if (recovery.hasClass('open')) {
+                        recovery.swapClass('open', 'closed');
+                        close.swapClass('open', 'closed');
+                        arrow.swapClass('active', 'inactive');
+                    } else {
+                        if ($(this).hasClass('sign-up')) {
+                            return;
+                        }
+                        recovery.swapClass('closed', 'open');
+                        close.swapClass('closed', 'open');
+                        arrow.swapClass('inactive', 'active');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

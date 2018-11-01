@@ -2,13 +2,19 @@ var express = require('express');
 var router = express.Router();
 var database = require("../../config/db");
 process.env.SECRET_KEY = "PAYMENT_ADMIN";
+var path = require('path');
 var bcrypt = require('bcrypt')
 const saltRounds = 10;
 
+//Send to page
+router.get('/', function (req, res, next) {
+    res.sendFile(path.join(__dirname, '../../pages/login.html'));
+});
+// Signup to page
 router.post('/', function (req, res, next) {
     var appData = {
         "error": 1,
-        "data": ""
+        "Data": ""
     };
     bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
         if (err) {
