@@ -45,7 +45,7 @@ function PartMeRetrieve() {
                 $.get("/payment/NextDate/" + element.ID_SERVICE, (response) => {
                     html = `
                     <tr>
-                        <td scope="row">` + (i + 1) + `</td>
+                        <td scope="row" >` + (i + 1) + `</td>
                         <td>` + element.NAME + `</td>
                         <td>` + element.PRICE + `</td>
                         <td>` + response.date + `</td>

@@ -33,7 +33,7 @@ router.get('/Admin_Plattforms', function (req, res, next) {
             appData.data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
-            connection.query("SELECT * FROM SERVICES WHERE ID_USER = ? AND STATUS=1", [decoded["data"].ID_USER], (err, rows) => {
+            connection.query("SELECT * FROM SERVICES WHERE ID_USER = ? AND STATUS=1 ORDER BY(services.CREATION_DATE)", [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
                     res.status(400).json(appData);
@@ -56,7 +56,8 @@ router.get('/User_Plattforms', function (req, res, next) {
         } else {
             query = `SELECT DISTINCT services.ID_SERVICE, services.NAME, services.PRICE, services.ID_USER 
                      FROM services join pivot INNER JOIN users 
-                     WHERE pivot.ID_USER = ?  AND services.STATUS=1`;
+                     WHERE pivot.ID_USER = ?  AND services.STATUS=1
+                     ORDER BY(services.CREATION_DATE)`;
             connection.query(query, [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
@@ -85,7 +86,6 @@ router.post('/Create/', function (req, res, next) {
             connection.query(query, [name, price, decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
-                    res.status(400).json(appData);
                 }
                 appData.data = "Inserted successfully";
 
@@ -96,7 +96,6 @@ router.post('/Create/', function (req, res, next) {
             connection.query(query, [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
-                    res.status(400).json(appData);
                 }
                 appData.data = "Inserted successfully";
 
@@ -105,18 +104,16 @@ router.post('/Create/', function (req, res, next) {
             connection.query(query, [decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
-                    res.status(400).json(appData);
                 }
-                res.clearCookie("Token")
-
                 token = jwt.sign({
                     data: rows[0]
                 }, process.env.SECRET_KEY, {
                     expiresIn: 60 * 60
                 });
-                res.cookie("Token", token);
+
+
+                res.cookie("Token", token).send("cookie sended");
             });
-            res.json(appData);
         }
         connection.release();
     })
@@ -172,7 +169,7 @@ router.get('/delete/:plattform', function (req, res, next) {
                         res.status(400).json(appData);
                     }
                     appData.data = "Deleted Successfully";
-                    res.json(appData);
+                    res.redirect("/dashboard")
                 });
             }
             connection.release();

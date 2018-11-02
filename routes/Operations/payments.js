@@ -25,8 +25,23 @@ router.use(function (req, res, next) {
 
 //Function for listing json
 function date_returned(d, count) {
-    d.setMonth((d.getMonth() + count) + 1)
-    return d.getMonth() + '/' + d.getFullYear();
+
+    d.setMonth((d.getMonth() + count))
+    var month = new Array();
+    month[0] = "Enero";
+    month[1] = "Febrero";
+    month[2] = "Marzo";
+    month[3] = "Abril";
+    month[4] = "Mayo";
+    month[5] = "Junio";
+    month[6] = "Julio";
+    month[7] = "Agosto";
+    month[8] = "Septiembre";
+    month[9] = "Octubre";
+    month[10] = "Noviembre";
+    month[11] = "Diciembre";
+
+    return month[d.getMonth()] + '/' + d.getFullYear();
 }
 // My next date
 router.get('/NextDate/:plattform/', function (req, res, next) {
@@ -114,7 +129,7 @@ router.post('/:plattform/:IDUser', function (req, res, next) {
                     appData.data = "Error occurred on query";
                     res.status(400).json(appData);
                 }
-                if (rows[0].ID_USER == decoded.ID_USER) {
+                if (rows[0].ID_USER == decoded["data"].ID_USER) {
                     var query = `INSERT INTO REGISTERS(DATE,ID_USER,ID_STATUS,ID_SERVICE)
                     VALUES(NOW(),?,2,?)`;
                     connection.query(query, [IDUser, plattform], (err, rows) => {
@@ -126,10 +141,11 @@ router.post('/:plattform/:IDUser', function (req, res, next) {
                         appData.error = 0;
                         res.json(appData);
                     });
+                } else {
+                    appData.data = "You're not the admin of the plattform";
+                    appData.error = 400
+                    res.status(400).json(appData);
                 }
-                appData.data = "You're not the admin of the plattform";
-                appData.error = 400
-                res.status(400).json(appData);
             });
         }
         connection.release();

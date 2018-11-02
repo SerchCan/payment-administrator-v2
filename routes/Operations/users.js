@@ -21,11 +21,8 @@ router.use(function (req, res, next) {
         res.status(204).redirect("/login");
     }
 });
-
 // Return list of members
 router.get('/members', function (req, res, next) {
-
-
     appData = {};
     decoded = jwt.decode(req.cookies["Token"]);
 
@@ -34,9 +31,10 @@ router.get('/members', function (req, res, next) {
             appData.data = "Internal Server Error";
             res.status(500).json(appData);
         } else {
-            sql = `SELECT users.NAME as NAME, users.LAST_NAME as LASTNAME, services.NAME as PLATTFORM, services.PRICE as PRICE 
+            sql = `SELECT users.ID_USER AS ID_U, users.NAME as NAME, users.LAST_NAME as LASTNAME, services.NAME as PLATTFORM, services.ID_SERVICE as ID_S, services.PRICE as PRICE 
             from users INNER JOIN services join pivot 
-            WHERE SERVICES.ID_USER=? AND pivot.ID_SERVICE=services.ID_SERVICE and users.ID_USER!=?`
+            WHERE SERVICES.ID_USER=? AND pivot.ID_SERVICE=services.ID_SERVICE and users.ID_USER!=?
+            ORDER BY(services.CREATION_DATE)`
             connection.query(sql, [decoded["data"].ID_USER, decoded["data"].ID_USER], (err, rows) => {
                 if (err) {
                     appData.data = "Error occurred on query";
