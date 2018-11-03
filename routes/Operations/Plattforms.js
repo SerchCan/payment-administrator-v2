@@ -181,4 +181,33 @@ router.get('/delete/:plattform', function (req, res, next) {
     }
 });
 
+// Add member to plattform
+router.post('/Member/', function (req, res, next) {
+    var appData = {};
+    var IdOrEmail = req.body.IdOrEmail;
+    var plattform = req.body.plattform;
+
+    decoded = jwt.decode(req.cookies["Token"]);
+
+    database.getConnection((err, connection) => {
+        if (err) {
+            appData.data = "Internal Server Error";
+            res.status(500).json(appData);
+        } else {
+            var query = `INSERT INTO pivot(ID_SERVICE,ID_USER) 
+            SELECT DISTINCT ?, users.ID_USER FROM users INNER JOIN services
+            WHERE (users.ID_USER=? OR users.MAIL=?) AND services.ID_USER=?`;
+            connection.query(query, [plattform, IdOrEmail, IdOrEmail, decoded["data"].ID_USER], (err, rows) => {
+                if (err) {
+                    appData.data = "Error occurred: Probabbly you're not the admin of the plattform";
+                    res.status(400).json(appData);
+                } else {
+                    appData.data = "Added successfully";
+                    res.json(appData);
+                }
+            });
+        }
+        connection.release();
+    })
+});
 module.exports = router;

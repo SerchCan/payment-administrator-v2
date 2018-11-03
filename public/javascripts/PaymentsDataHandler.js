@@ -30,6 +30,8 @@ function retrieveMembers() {
         success: function (response) {
             response.forEach((element, i) => {
                 // Generate Row
+
+
                 url = element.ID_S + "/" + element.ID_U
                 $.get("/payment/NextDate/" + url, (response) => {
                     url = element.ID_S + "/" + element.ID_U
@@ -43,6 +45,7 @@ function retrieveMembers() {
                             <td> <button onClick="javascript:DoPayment('/payment/` + url + `')" class="btn btn-success">Pago</button></td>
                         </tr>`;
                     $("#Members").append(html)
+
                 });
 
             });

@@ -72,6 +72,31 @@
         </div>
     </div>
 
+    <div id="AddMember" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Añadir miembro a la plataforma</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <form id="AddMember-form" method="POST" action="/plattforms/Member/">
+                    <div class="modal-body">
+                        <label>Id o Correo electrónico del miembro:</label>
+                        <input type="text" class="form-control" name="IdOrEmail" id="Name">
+                        <label>Plataforma:</label>
+                        <select class="form-control" name="plattform" id="select-plattform">
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-info" value="Añadir a plataforma"></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
     <div class="container">
         <ul class="nav nav-tabs">
             <li class="active"><a data-toggle="tab" href="#plattforms">Plataformas</a></li>
@@ -135,6 +160,8 @@
 
                         </tbody>
                     </table>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#AddMember">&#43; Añadir miembro</button>
+
                 </div>
             </div>
 

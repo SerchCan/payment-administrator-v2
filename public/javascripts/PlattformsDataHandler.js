@@ -1,12 +1,13 @@
 function AdminRetrieve() {
     $("#Admin-plats").html("")
+    $("#select-plattform").html("")
     url = "/plattforms/Admin_Plattforms"
     $.ajax({
         type: "GET",
         url: url,
         success: function (response) {
             response.forEach((element, i) => {
-
+                selects = `<option  value="` + element.ID_SERVICE + `">` + element.NAME + `</option>`;
                 html = `
                 <tr>
                     <td scope="row" id=` + element.ID_SERVICE + `>` + (i + 1) + `</td>
@@ -16,7 +17,7 @@ function AdminRetrieve() {
                     <td> <a href="/plattforms/delete/` + element.ID_SERVICE + `" class="btn btn-danger">&#128465;</a></td>
                 </tr>`;
                 $("#Admin-plats").append(html)
-
+                $("#select-plattform").append(selects)
             });
             $('button').click(function () {
                 var id = $(this).closest("tr").find("td:nth-child(1)").attr('id');
@@ -26,7 +27,6 @@ function AdminRetrieve() {
                 $('#Price').val(price);
                 $('#Id').val(id);
             });
-
         },
         error: function (response) {
             console.log("error", response.Data)
