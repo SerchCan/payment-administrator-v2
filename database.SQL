@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-10-2018 a las 23:44:24
+-- Tiempo de generación: 03-11-2018 a las 21:22:36
 -- Versión del servidor: 10.1.26-MariaDB
 -- Versión de PHP: 7.1.8
 
@@ -58,6 +58,8 @@ CREATE TABLE `services` (
   `ID_SERVICE` int(11) NOT NULL,
   `NAME` varchar(150) NOT NULL,
   `PRICE` decimal(10,2) NOT NULL,
+  `CREATION_DATE` date NOT NULL,
+  `STATUS` tinyint(1) NOT NULL,
   `ID_USER` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -94,13 +96,6 @@ CREATE TABLE `users` (
   `PASSWORD` varchar(800) NOT NULL,
   `ID_TYPE` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `users`
---
-
-INSERT INTO `users` (`ID_USER`, `NAME`, `LAST_NAME`, `MAIL`, `PASSWORD`, `ID_TYPE`) VALUES
-(1, 'Sergio Antonio', 'Can Bacab', 'gersiopumas@gmail.com', '$2a$10$gbQGpyJ6MSJEkgm4cDtkkeOlv6yAPCBiNwPokgVvCpxiq/NtBY1RO', 1);
 
 -- --------------------------------------------------------
 
@@ -196,7 +191,7 @@ ALTER TABLE `status`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `ID_USER` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_USER` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `users_types`
 --
@@ -217,21 +212,21 @@ ALTER TABLE `pivot`
 -- Filtros para la tabla `registers`
 --
 ALTER TABLE `registers`
-  ADD CONSTRAINT `REGISTERS_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `REGISTERS_ibfk_2` FOREIGN KEY (`ID_STATUS`) REFERENCES `status` (`ID_STATUS`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `REGISTERS_ibfk_3` FOREIGN KEY (`ID_SERVICE`) REFERENCES `services` (`ID_SERVICE`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `registers_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`),
+  ADD CONSTRAINT `registers_ibfk_2` FOREIGN KEY (`ID_SERVICE`) REFERENCES `services` (`ID_SERVICE`),
+  ADD CONSTRAINT `registers_ibfk_3` FOREIGN KEY (`ID_STATUS`) REFERENCES `status` (`ID_STATUS`);
 
 --
 -- Filtros para la tabla `services`
 --
 ALTER TABLE `services`
-  ADD CONSTRAINT `SERVICES_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `services_ibfk_1` FOREIGN KEY (`ID_USER`) REFERENCES `users` (`ID_USER`);
 
 --
 -- Filtros para la tabla `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `USERS_ibfk_1` FOREIGN KEY (`ID_TYPE`) REFERENCES `users_types` (`ID_TYPE`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`ID_TYPE`) REFERENCES `users_types` (`ID_TYPE`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
